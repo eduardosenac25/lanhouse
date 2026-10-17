@@ -1,0 +1,20 @@
+meta {
+  name: Alterar jogador
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/jogadores/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nome": "Ana Paula",
+    "nick": "ana2",
+    "email": "ana.nova@exemplo.com",
+    "obs": "Atualização de dados"
+  }
+}

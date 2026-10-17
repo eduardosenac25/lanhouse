@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Jogador {
+  id        Int       @id @default(autoincrement())
+  nome      String    @db.VarChar(40)
+  nick      String    @unique @db.VarChar(20)
+  email     String    @db.VarChar(60)
+  obs       String?   @db.Text
+  saldo     Decimal   @default(0) @db.Decimal(9, 2)
+  recargas  Recarga[]
+  sessoes   Sessao[]
+  @@map("jogadores")
+}
+
+model Estacao {
+  id         Int      @id @default(autoincrement())
+  nome       String   @unique @db.VarChar(20)
+  tipo       String   @db.VarChar(15)
+  valorHora  Decimal  @db.Decimal(9, 2)
+  status     String   @default("livre") @db.VarChar(10)
+  sessoes    Sessao[]
+  @@map("estacoes")
+}
+
+model Sessao {
+  id         Int       @id @default(autoincrement())
+  jogador    Jogador   @relation(fields: [jogadorId], references: [id])
+  jogadorId  Int
+  estacao    Estacao   @relation(fields: [estacaoId], references: [id])
+  estacaoId  Int
+  horas      Decimal   @db.Decimal(4, 1)
+  preco      Decimal   @db.Decimal(9, 2)
+  data       DateTime  @default(now())
+  @@map("sessoes")
+}
+
+model Recarga {
+  id         Int       @id @default(autoincrement())
+  jogador    Jogador   @relation(fields: [jogadorId], references: [id])
+  jogadorId  Int
+  valor      Decimal   @db.Decimal(9, 2)
+  tipo       String    @db.VarChar(10)
+  data       DateTime  @default(now())
+  @@map("recargas")
+}

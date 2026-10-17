@@ -1,0 +1,676 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Arena Lan House",
+    "description": "Controle de sessões de jogo de uma Lan House: jogadores, estações, recargas de crédito e sessões (com transações).",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Jogadores",
+      "description": "CRUD de jogadores e envio do extrato por e-mail"
+    },
+    {
+      "name": "Estações",
+      "description": "CRUD das estações (PCs, consoles e simuladores)"
+    },
+    {
+      "name": "Recargas",
+      "description": "Recargas de crédito (transação: recarga + saldo)"
+    },
+    {
+      "name": "Sessões",
+      "description": "Sessões de jogo (transação: sessão + saldo + estação)"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/jogadores/": {
+      "get": {
+        "tags": [
+          "Jogadores"
+        ],
+        "summary": "Lista todos os jogadores",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Jogadores"
+        ],
+        "summary": "Cadastra um jogador (saldo inicia em R$ 0,00)",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/jogadores/{id}": {
+      "get": {
+        "tags": [
+          "Jogadores"
+        ],
+        "summary": "Busca um jogador pelo id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Jogadores"
+        ],
+        "summary": "Altera os dados de um jogador (o saldo só muda por recargas e sessões)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Jogadores"
+        ],
+        "summary": "Exclui um jogador (somente se não tiver sessões ou recargas)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/jogadores/email/{id}": {
+      "get": {
+        "tags": [
+          "Jogadores"
+        ],
+        "summary": "Envia por e-mail o extrato de sessões e recargas do jogador",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/estacoes/": {
+      "get": {
+        "tags": [
+          "Estações"
+        ],
+        "summary": "Lista todas as estações (PCs, consoles e simuladores)",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Estações"
+        ],
+        "summary": "Cadastra uma estação (inicia como livre)",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/estacoes/{id}": {
+      "get": {
+        "tags": [
+          "Estações"
+        ],
+        "summary": "Busca uma estação pelo id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Estações"
+        ],
+        "summary": "Altera os dados de uma estação",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Estações"
+        ],
+        "summary": "Exclui uma estação (somente se não tiver sessões)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/estacoes/{id}/liberar": {
+      "patch": {
+        "tags": [
+          "Estações"
+        ],
+        "summary": "Libera a estação (encerra o uso após o fim da sessão)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/sessoes/": {
+      "get": {
+        "tags": [
+          "Sessões"
+        ],
+        "summary": "Lista as sessões de jogo (mais recentes primeiro)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "jogadorId",
+            "in": "query",
+            "description": "Filtra as sessões de um jogador",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sessões"
+        ],
+        "summary": "Abre uma sessão de jogo (transação)",
+        "description": "Rota de inclusão com transação. Em uma única transação o sistema: (1) valida jogador e estação; (2) confere se a estação está livre; (3) confere se o saldo do jogador cobre horas x valor da hora; (4) grava a sessão com o preço da hora daquele momento; (5) debita o valor do saldo do jogador; (6) marca a estação como ocupada. Se qualquer passo falhar, nada é gravado (rollback).",
+        "responses": {
+          "201": {
+            "description": "Sessão criada. Retorna a sessão, o jogador com o saldo atualizado e a estação ocupada.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "sessao": {
+                    "id": 12,
+                    "jogadorId": 1,
+                    "estacaoId": 3,
+                    "horas": "2",
+                    "preco": "8",
+                    "data": "2026-10-16T22:10:00.000Z"
+                  },
+                  "jogador": {
+                    "id": 1,
+                    "nome": "Eduardo",
+                    "saldo": "34"
+                  },
+                  "estacao": {
+                    "id": 3,
+                    "nome": "PC-03",
+                    "status": "ocupada"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos, jogador/estação inexistente ou saldo insuficiente.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erro": "Saldo insuficiente. Saldo atual do jogador: R$ 10.00; custo da sessão: R$ 16.00"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "A estação já está ocupada.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erro": "A estação PC-03 está ocupada"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jogadorId",
+                  "estacaoId",
+                  "horas"
+                ],
+                "properties": {
+                  "jogadorId": {
+                    "type": "integer",
+                    "description": "Id do jogador que vai jogar",
+                    "example": 1
+                  },
+                  "estacaoId": {
+                    "type": "integer",
+                    "description": "Id da estação (precisa estar livre)",
+                    "example": 3
+                  },
+                  "horas": {
+                    "type": "number",
+                    "description": "Tempo contratado, de 0.5 a 12, em múltiplos de 0.5",
+                    "example": 2
+                  }
+                }
+              },
+              "example": {
+                "jogadorId": 1,
+                "estacaoId": 3,
+                "horas": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessoes/{id}": {
+      "get": {
+        "tags": [
+          "Sessões"
+        ],
+        "summary": "Busca uma sessão pelo id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sessões"
+        ],
+        "summary": "Cancela uma sessão: exclui o registro, estorna o valor ao jogador e libera a estação (transação)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/recargas/": {
+      "get": {
+        "tags": [
+          "Recargas"
+        ],
+        "summary": "Lista as recargas de crédito (mais recentes primeiro)",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Recargas"
+        ],
+        "summary": "Registra uma recarga e soma o valor ao saldo do jogador (transação)",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/recargas/{id}": {
+      "delete": {
+        "tags": [
+          "Recargas"
+        ],
+        "summary": "Estorna uma recarga: exclui o registro e retira o valor do saldo (transação)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}

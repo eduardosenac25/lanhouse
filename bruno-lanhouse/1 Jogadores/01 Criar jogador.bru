@@ -1,0 +1,20 @@
+meta {
+  name: Criar jogador
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/jogadores
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nome": "Ana Paula",
+    "nick": "ana",
+    "email": "ana@exemplo.com",
+    "obs": "Jogadora casual"
+  }
+}

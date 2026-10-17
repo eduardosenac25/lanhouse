@@ -1,0 +1,19 @@
+meta {
+  name: Alterar estacao
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/estacoes/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nome": "PC-01",
+    "tipo": "PC",
+    "valorHora": 9
+  }
+}
