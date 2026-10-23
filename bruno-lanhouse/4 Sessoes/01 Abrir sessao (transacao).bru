@@ -5,15 +5,15 @@ meta {
 }
 
 post {
-  url: {{baseUrl}}/sessoes
+  url: http://localhost:3000/sessoes
   body: json
   auth: none
 }
 
 body:json {
   {
-    "jogadorId": 1,
-    "estacaoId": 1,
+    "jogadorId": 3,
+    "estacaoId": 7,
     "horas": 2
   }
 }

@@ -5,15 +5,15 @@ meta {
 }
 
 post {
-  url: {{baseUrl}}/recargas
+  url: http://localhost:3000/recargas
   body: json
   auth: none
 }
 
 body:json {
   {
-    "jogadorId": 1,
-    "valor": 50,
-    "tipo": "pix"
+    "jogadorId": 4,
+    "valor": 100,
+    "tipo": "dinheiro"
   }
 }
